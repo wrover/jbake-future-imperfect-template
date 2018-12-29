@@ -1,6 +1,6 @@
 <ul class="actions pagination">
-    <#if (config.index_paginate?boolean && numberOfPages > 1) >
-	    	
+    <#if (config.index_paginate == true && numberOfPages > 1 )>
+
 	        <li><a href="${content.rootpath}${previousFileName!'#'}" 
 	                class="<#if (previousFileName?? == false) >disabled </#if> button big previous">PREVIOUS</a></li>
 	   
