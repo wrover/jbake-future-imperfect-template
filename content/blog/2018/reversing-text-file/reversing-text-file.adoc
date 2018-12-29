@@ -1,0 +1,45 @@
+= Reversing (big) text file
+wrover
+2018-12-01
+:jbake-last_updated: 2018-12-01
+:jbake-author: Larry Rodionov
+:jbake-type: post
+:jbake-status: published
+:jbake-tags: java, interview-questions
+:description: Opening a new series of Java interview questions
+:idprefix:
+
+When interviewing technical people the most challenging thing is to discover candidate's creativity. This opening post in new https://wrover.me/tags/interview-questions.html[interview-questions] tag presents an idea of such a task. Of course this would serve the original aim only in the case a candidate hasn't known a ready answer.
+
+In a minimal form the task can be presented as _to reverse the lines order in a text file_, i.e. a one which is a result of the next code execution.
+
+[source,java]
+.WriteRandomTextFile.java
+----
+include::WriteRandomTextFile.java[]
+----
+
+The size of a file, and the amount of available memory should be taken into account but it's quite obvious that the simplest case when we can afford putting a whole file into memory is not of a real interest. Nevertheless it can be useful for testing more effective solutions, not to mention showing candidate's knowledge how to iterate over a collection in the back direction.
+
+[source,java]
+.ReversingInMemory.java
+----
+include::ReversingInMemory.java[]
+----
+
+Most people start to find a way to read file in reverse order, and this is the trap. It turns out there is no easy way to do this. You even cannot use `java.util.Scanner` but I personally appreciate when a candidate is aware of. Yes, we have `java.io.RandomAccessFile` but it doesn't enable to seek between new lines characters. We can read or map a fragment of a fixed size, but we don't know what is the length of the longest line in a file. So it becomes not easy to comprehend, let alone implement.
+
+By far the most favorite _mental pattern_ of mine in such dead-end cases is *inversion*. It works quite often and this is not an exception. If we are not able to read a file in that way -- don't worry, let's read it in a straightforward effective way and inverse the order of writes! Having a next line it becomes super-easy to calculate the correct write position, starting from the end of file.
+
+[source,java]
+.ReversingWithRAF.java
+----
+include::ReversingWithRAF.java[]
+----
+
+To validate results use `diff` utility with `--report-identical-files` option:
+
+```Bash
+$ diff -s reverse-memory.txt reverse-raf.txt
+Files reverse-memory.txt and reverse-raf.txt are identical
+```
